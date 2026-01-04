@@ -39,3 +39,9 @@
 
 # debug information files
 *.dwo
+
+# --- CLion & CMake specific ---
+cmake-build-*/
+.idea/
+*.swp
+*.ds_store
