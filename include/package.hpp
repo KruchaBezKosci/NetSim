@@ -10,7 +10,7 @@
 class Package {
   public:
     Package();
-    Package(ElementID id);s
+    Package(ElementID id);
     //przenoszenie
     Package(Package &&other) noexcept;
     Package &operator=(Package &&other) noexcept;
