@@ -22,12 +22,36 @@ if(!freed_IDs.empty()){
 //musi bcyc zajete
 assigned_IDs.insert(id_);
 };
-
-Package::~Package() {
-//gdy paczka nie została przenisiona gdzies
-    assigned_IDs.erase(id_);
-    freed_IDs.insert(id_);
+Package::Package(ElementID id): id_(id){
+  assigned_IDs.insert(id);
+  if(freed_IDs.count(id_)){
+    freed_IDs.erase(id_);
+  }
 }
 
+Package::Package(Package&&other) noexcept: id_(other.id_){
+  other.id_ = BLANK_ID;
+}
+// Operator przypisania przenoszącego (Move Assignment)
+Package& Package::operator=(Package&& other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+    if (id_ != BLANK_ID) {
+        assigned_IDs.erase(id_);
+        freed_IDs.insert(id_);
+    }
+    id_ = other.id_;
+    other.id_ = BLANK_ID;
+    return *this;
+}
+
+Package::~Package() {
+//tylko jak wazne id
+    if (id_ != BLANK_ID) {
+        assigned_IDs.erase(id_);
+        freed_IDs.insert(id_);
+    }
+}
 
 
