@@ -30,7 +30,7 @@ public:
     virtual ReceiverType get_receiver_type() const = 0;
 
     virtual ~IPackageReceiver() = default;
-
+};
 
 class PackageSender {
 public:
@@ -59,5 +59,5 @@ private:
     std::vector<IPackageReceiver*> receivers_; // Lista potencjalnych odbiorców
 };
 
-};
+
 #endif //NETSIM_NODES_HPP

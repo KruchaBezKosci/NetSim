@@ -9,7 +9,6 @@ void PackageSender::send_package() {
     if (buffer_ && !receivers_.empty()) {
 
         // Wybieramy odbiorcę z jednakowym prawdopodobieństwem (wymóg z instrukcji)
-        //
         size_t index = std::rand() % receivers_.size();
         IPackageReceiver* receiver = receivers_[index];
 
