@@ -37,6 +37,11 @@ public:
     PackageSender() = default;
     PackageSender(PackageSender&&) = default;
 
+    auto begin() { return receivers_.begin(); }
+    auto end() { return receivers_.end(); }
+    auto cbegin() const { return receivers_.cbegin(); }
+    auto cend() const { return receivers_.cend(); }
+
     // Metoda do dodawania odbiorcy (np. konkretnego robotnika do listy rampy)
     void add_receiver(IPackageReceiver* receiver) { receivers_.push_back(receiver); }
 
