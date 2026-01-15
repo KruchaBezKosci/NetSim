@@ -2,15 +2,11 @@
 // Lukasz 15.01.2026
 //
 
-#ifndef NETSIM_NODES_HPP
-#define NETSIM_NODES_HPP
+#ifndef NETSIM_WORKER_HPP
+#define NETSIM_WORKER_HPP
 
-#include "types.hpp"
-#include "package.hpp"
+#include "nodes.hpp"
 #include "storage_types.hpp"
-
-#include <optional>
-#include <vector>
 #include <memory>
 
 

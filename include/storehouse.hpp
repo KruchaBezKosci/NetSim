@@ -1,6 +1,13 @@
 //
 // Lukasz 15.01.2026
 //
+#ifndef NETSIM_STOREHOUSE_HPP
+#define NETSIM_STOREHOUSE_HPP
+
+#include "nodes.hpp"
+#include "storage_types.hpp"
+#include <memory>
+
 class Storehouse : public IPackageReceiver {
 public:
 

@@ -3,7 +3,9 @@
 //
 
 #include "nodes.hpp"
-#include <cstdlib> // do std::rand()
+#include "worker.hpp"
+#include "storehouse.hpp"
+#include <cstdlib>
 
 void Worker::do_work(Time t) {
    
