@@ -13,10 +13,10 @@ if(!freed_IDs.empty()){
   freed_IDs.erase(freed_IDs.begin());
 } else {
   if (assigned_IDs.empty()) {
-    id_ = 1; //zwociu pierwsze id
+    id_ = 1; //zwróci pierwsze id
   } else {
     // zwraca najwiekszy w secie
-    id_ = *assigned_IDs.rbegin() + 1;
+    id_ = *assigned_IDs.rbegin()  + 1;
   }
 }
 //musi bcyc zajete
