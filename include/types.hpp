@@ -7,5 +7,7 @@
 #include <cstdint>
 
 using ElementID = int;
+using Time = int;
+using TimeOffset = int;
 
 #endif //TYPES_HPP

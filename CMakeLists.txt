@@ -8,4 +8,6 @@ include_directories(include)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-add_executable(NetSim main.cpp ${SOURCES})
+add_executable(NetSim main.cpp ${SOURCES}
+        include/nodes.hpp
+        src/nodes.cpp)
