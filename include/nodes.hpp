@@ -7,9 +7,13 @@
 
 #include "types.hpp"
 #include "package.hpp"
+#include "storage_types.hpp"
 
 #include <optional>
 #include <vector>
+#include <list>
+#include <memory>
+
 
 // Typy odbiorców wymagane do badania spójności sieci
 enum class ReceiverType {
@@ -29,6 +33,9 @@ public:
     // Metoda potrzebna do algorytmu sprawdzania, czy fabryka jest dobrze zbudowana
     virtual ReceiverType get_receiver_type() const = 0;
 
+    virtual IPackageStockpile::const_iterator begin() const = 0;
+    virtual IPackageStockpile::const_iterator end() const = 0;
+
     virtual ~IPackageReceiver() = default;
 };
 
@@ -37,31 +44,21 @@ public:
     PackageSender() = default;
     PackageSender(PackageSender&&) = default;
 
+    void send_package(); // Implementacja w .cpp
+    const std::optional<Package>& get_sending_buffer() const { return buffer_; }
+    void add_receiver(IPackageReceiver* receiver) { receivers_.push_back(receiver); }
+
     auto begin() { return receivers_.begin(); }
     auto end() { return receivers_.end(); }
     auto cbegin() const { return receivers_.cbegin(); }
     auto cend() const { return receivers_.cend(); }
 
-    // Metoda do dodawania odbiorcy (np. konkretnego robotnika do listy rampy)
-    void add_receiver(IPackageReceiver* receiver) { receivers_.push_back(receiver); }
-
-    // Metoda do sprawdzania, komu rampa może wysłać paczkę
-    const std::vector<IPackageReceiver*>& get_receivers() const { return receivers_; }
-
-    // Tu będzie się działo wysyłanie (logikę napiszemy w .cpp)
-    void send_package();
-
-    // Dostęp do bufora paczki (żeby sprawdzić, co rampa aktualnie "trzyma")
-    const std::optional<Package>& get_sending_buffer() const { return buffer_; }
-
 protected:
     // Tu rampa umieszcza paczkę, zanim zostanie ona przekazana dalej
     void push_package(Package&& p) { buffer_ = std::move(p); }
+    std::optional<Package> buffer_;
+    std::vector<IPackageReceiver*> receivers_;
 
-    std::optional<Package> buffer_; // Bufor na jedną paczkę
-
-private:
-    std::vector<IPackageReceiver*> receivers_; // Lista potencjalnych odbiorców
 };
 
 
