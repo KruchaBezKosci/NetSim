@@ -28,10 +28,14 @@ public:
     // Używamy Package&& p, czyli przenoszenia.
     virtual void receive_package(Package&& p) = 0;
 
-    virtual ElementID get_id() const = 0;
+    [[nodiscard]] virtual ElementID get_id() const = 0;
 
-    // Metoda potrzebna do algorytmu sprawdzania, czy fabryka jest dobrze zbudowana
-    virtual ReceiverType get_receiver_type() const = 0;
+    virtual IPackageStockpile::const_iterator begin() const = 0;
+    virtual IPackageStockpile::const_iterator end() const = 0;
+    virtual IPackageStockpile::const_iterator cbegin() const = 0;
+    virtual IPackageStockpile::const_iterator cend() const = 0;
+
+    virtual ReceiverType get_receiver_type() const { return ReceiverType::WORKER; }
 
     virtual IPackageStockpile::const_iterator begin() const = 0;
     virtual IPackageStockpile::const_iterator end() const = 0;
