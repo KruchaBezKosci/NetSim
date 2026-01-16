@@ -10,7 +10,6 @@
 #include "storage_types.hpp"
 
 #include <optional>
-#include <vector>
 #include <list>
 #include <memory>
 #include <functional>
@@ -60,7 +59,7 @@ public:
     const_iterator end() const { return preferences_.end(); }
     const_iterator cbegin() const { return preferences_.cbegin(); }
     const_iterator cend() const { return preferences_.cend(); }
-    
+
 private:
     preferences_t preferences_;
     std::function<double()> pg_;
@@ -74,18 +73,12 @@ public:
 
     void send_package(); // Implementacja w .cpp
     const std::optional<Package>& get_sending_buffer() const { return buffer_; }
-    void add_receiver(IPackageReceiver* receiver) { receivers_.push_back(receiver); }
 
-    auto begin() { return receivers_.begin(); }
-    auto end() { return receivers_.end(); }
-    auto cbegin() const { return receivers_.cbegin(); }
-    auto cend() const { return receivers_.cend(); }
+    ReceiverPreferences receiver_preferences_;
 
 protected:
-    // Tu rampa umieszcza paczkę, zanim zostanie ona przekazana dalej
     void push_package(Package&& p) { buffer_ = std::move(p); }
     std::optional<Package> buffer_;
-    std::vector<IPackageReceiver*> receivers_;
 
 };
 
