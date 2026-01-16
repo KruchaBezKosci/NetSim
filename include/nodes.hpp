@@ -13,6 +13,8 @@
 #include <vector>
 #include <list>
 #include <memory>
+#include <functional>
+#include <map>
 
 
 // Typy odbiorców wymagane do badania spójności sieci
@@ -37,10 +39,32 @@ public:
 
     virtual ReceiverType get_receiver_type() const { return ReceiverType::WORKER; }
 
-    virtual IPackageStockpile::const_iterator begin() const = 0;
-    virtual IPackageStockpile::const_iterator end() const = 0;
-
     virtual ~IPackageReceiver() = default;
+};
+
+class ReceiverPreferences {
+public:
+    using preferences_t = std::map<IPackageReceiver*, double>;
+    using const_iterator = preferences_t::const_iterator;
+
+    ReceiverPreferences(std::function<double()> pg = []() { return (double)rand() / RAND_MAX; })
+        : pg_(std::move(pg)) {}
+
+    void add_receiver(IPackageReceiver* r);
+    void remove_receiver(IPackageReceiver* r);
+    IPackageReceiver* choose_receiver();
+
+    [[nodiscard]] const preferences_t& get_preferences() const { return preferences_; }
+
+    const_iterator begin() const { return preferences_.begin(); }
+    const_iterator end() const { return preferences_.end(); }
+    const_iterator cbegin() const { return preferences_.cbegin(); }
+    const_iterator cend() const { return preferences_.cend(); }
+    
+private:
+    preferences_t preferences_;
+    std::function<double()> pg_;
+    void rescale();
 };
 
 class PackageSender {
