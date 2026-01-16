@@ -8,30 +8,22 @@
 #include "storage_types.hpp"
 #include <memory>
 
+
 class Storehouse : public IPackageReceiver {
 public:
-
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO))
+    Storehouse(ElementID id, std::unique_ptr<IPackageQueue> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO))
         : id_(id), d_(std::move(d)) {}
 
-    void receive_package(Package&& p) override {
-        d_->push(std::move(p));
-    }
-
+    void receive_package(Package&& p) override { d_->push(std::move(p)); }
     ElementID get_id() const override { return id_; }
-    
     ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
 
-    IPackageStockpile* get_stockpile() const { return d_.get(); }
-
-    auto begin() const override { return d_->begin(); }
-    auto end() const override { return d_->end(); }
-    auto cbegin() const { return d_->cbegin(); }
-    auto cend() const { return d_->cend(); }
+    IPackageStockpile::const_iterator begin() const override { return d_->begin(); }
+    IPackageStockpile::const_iterator end() const override { return d_->end(); }
 
 private:
     ElementID id_;
-    std::unique_ptr<IPackageStockpile> d_;
+    std::unique_ptr<IPackageQueue> d_;
 };
 //
 //
