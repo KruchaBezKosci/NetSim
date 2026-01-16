@@ -35,14 +35,11 @@ IPackageReceiver* ReceiverPreferences::choose_receiver() {
 
 void PackageSender::send_package() {
     // Sprawdzamy, czy w ogóle mamy paczkę do wysłania i czy mamy dokąd ją wysłać
-    if (buffer_ && !receivers_.empty()) {
-
-        // Wybieramy odbiorcę z jednakowym prawdopodobieństwem (wymóg z instrukcji)
-        size_t index = std::rand() % receivers_.size();
-        IPackageReceiver* receiver = receivers_[index];
-
-        // Przekazujemy paczkę (move semantics!) i czyścimy bufor
-        receiver->receive_package(std::move(buffer_.value()));
-        buffer_.reset();
+    if (buffer_) {
+        IPackageReceiver* r = receiver_preferences_.choose_receiver();
+        if (r) {
+            r->receive_package(std::move(*buffer_));
+            buffer_.reset();
+        }
     }
 }
