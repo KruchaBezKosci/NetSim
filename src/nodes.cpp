@@ -23,6 +23,16 @@ void ReceiverPreferences::rescale() {
     }
 }
 
+IPackageReceiver* ReceiverPreferences::choose_receiver() {
+    double val = pg_();
+    double sum = 0.0;
+    for (auto const& [receiver, prob] : preferences_) {
+        sum += prob;
+        if (val <= sum) return receiver;
+    }
+    return nullptr;
+}
+
 void PackageSender::send_package() {
     // Sprawdzamy, czy w ogóle mamy paczkę do wysłania i czy mamy dokąd ją wysłać
     if (buffer_ && !receivers_.empty()) {
