@@ -11,9 +11,9 @@
 #include <list>
 #include <map>
 #include <functional>
-#include "types.hxx"
-#include "package.hxx"
-#include "storage_types.hxx"
+#include "types.hpp"
+#include "package.hpp"
+#include "storage_types.hpp"
 
 
 
