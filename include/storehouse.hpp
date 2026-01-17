@@ -4,26 +4,35 @@
 #ifndef NETSIM_STOREHOUSE_HPP
 #define NETSIM_STOREHOUSE_HPP
 
-#include "nodes.hpp"
-#include "storage_types.hpp"
 #include <memory>
+#include <optional>
+#include <vector>
+#include <list>
+#include <map>
+#include <functional>
+#include "types.hxx"
+#include "package.hxx"
+#include "storage_types.hxx"
 
 
 class Storehouse : public IPackageReceiver {
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageQueue> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO))
-        : id_(id), d_(std::move(d)) {}
+    Storehouse(ElementID id, std::unique_ptr<IPackageQueue> d = std::makeunique<PackageQueue>(PackageQueueType::FIFO))
+        : id(id), d_(std::move(d)) {}
 
-    void receive_package(Package&& p) override { d_->push(std::move(p)); }
-    ElementID get_id() const override { return id_; }
-    ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
+    void receivepackage(Package&& p) override { d->push(std::move(p)); }
+    ElementID getid() const override { return id; }
 
-    IPackageStockpile::const_iterator begin() const override { return d_->begin(); }
-    IPackageStockpile::const_iterator end() const override { return d_->end(); }
+    // Metody specyficzne dla Storehouse
+    ReceiverType get_receiver_type() const { return ReceiverType::STOREHOUSE; }
+    IPackageStockpile::constiterator begin() const { return d->begin(); }
+    IPackageStockpile::constiterator end() const { return d->end(); }
+    IPackageStockpile::constiterator cbegin() const { return d->cbegin(); }
+    IPackageStockpile::constiterator cend() const { return d->cend(); }
 
 private:
     ElementID id_;
-    std::unique_ptr<IPackageQueue> d_;
+    std::uniqueptr<IPackageQueue> d;
 };
 //
 //
