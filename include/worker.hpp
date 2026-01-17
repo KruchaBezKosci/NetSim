@@ -5,33 +5,42 @@
 #ifndef NETSIM_WORKER_HPP
 #define NETSIM_WORKER_HPP
 
-#include "nodes.hpp"
-#include "storage_types.hpp"
 #include <memory>
+#include <optional>
+#include <vector>
+#include <list>
+#include <map>
+#include <functional>
+#include "types.hxx"
+#include "package.hxx"
+#include "storage_types.hxx"
 
 
 
 class Worker : public PackageSender, public IPackageReceiver {
 public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q)
-        : PackageSender(), id_(id), pd_(pd), q_(std::move(q)) {}
+    Worker(ElementID id, TimeOffset pd, std::uniqueptr<IPackageQueue> q)
+        : PackageSender(), id(id), pd(pd), q(std::move(q)) {}
 
-    void do_work(Time t); 
+    void do_work(Time t);
+    void receivepackage(Package&& p) override { q->push(std::move(p)); }
+    ElementID getid() const override { return id; }
 
-    void receive_package(Package&& p) override { q_->push(std::move(p)); }
-    ElementID get_id() const override { return id_; }
-    ReceiverType get_receiver_type() const override { return ReceiverType::WORKER; }
-
-    IPackageStockpile::const_iterator begin() const override { return q_->begin(); }
-    IPackageStockpile::const_iterator end() const override { return q_->end(); }
+    // Metody specyficzne dla Worker
+    ReceiverType get_receiver_type() const { return ReceiverType::WORKER; }
+    IPackageStockpile::constiterator begin() const { return q->begin(); }
+    IPackageStockpile::constiterator end() const { return q->end(); }
+    IPackageStockpile::constiterator cbegin() const { return q->cbegin(); }
+    IPackageStockpile::constiterator cend() const { return q->cend(); }
 
 private:
-    ElementID id_;
-    TimeOffset pd_;
-    std::unique_ptr<IPackageQueue> q_;
-    std::optional<Package> processing_buffer_;
+    ElementID id;
+    TimeOffset pd;
+    std::uniqueptr<IPackageQueue> q;
+    std::optional<Package> processingbuffer;
     Time startTime_ = 0;
 };
 //
 //
 //
+#endif
