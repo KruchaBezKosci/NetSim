@@ -8,22 +8,19 @@
 #include <cstdlib>
 
 void Worker::do_work(Time t) {
-   
-    if (!processing_buffer_.has_value() && !q_->empty()) {
-
-        processing_buffer_.emplace(q_->pop());
-
-        startTime_ = t;
+    // 1. Jeśli nie pracujemy, a kolejka nie jest pusta - pobierz paczkę
+    if (!processingbuffer && !q_->empty()) {
+        processingbuffer = q->pop();
+        startTime = t;
     }
 
-    if (processing_buffer_.has_value()) {
-
-        if (t - startTime_ + 1 >= pd_) {
-
-            push_package(std::move(processing_buffer_.value()));
-
-            processing_buffer_.reset();
-            startTime_ = 0;
+    // 2. Jeśli pracujemy, sprawdź czy czas minął
+    if (processingbuffer) {
+        // Czas pracy to różnica między aktualnym czasem a czasem rozpoczęcia.
+        // Jeśli pd = 1, paczka powinna wyjść w tym samym kwancie czasu.
+        if (t - startTime + 1 >= pd_) {
+            push_package(std::move(*processingbuffer));
+            processingbuffer.reset();
         }
     }
 }
