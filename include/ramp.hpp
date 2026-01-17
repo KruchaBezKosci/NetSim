@@ -2,6 +2,16 @@
 // lukasz 17.01.26
 //
 
+#include <memory>
+#include <optional>
+#include <vector>
+#include <list>
+#include <map>
+#include <functional>
+#include "types.hxx"
+#include "package.hxx"
+#include "storage_types.hxx"
+
 class Ramp : public PackageSender {
 public:
     Ramp(ElementID id, TimeOffset di) : PackageSender(), id(id), di(di) {}
