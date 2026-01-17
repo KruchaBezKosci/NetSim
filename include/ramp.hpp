@@ -1,6 +1,8 @@
 //
 // lukasz 17.01.26
 //
+#ifndef RAMP_HPP
+#define RAMP_HPP
 
 #include <memory>
 #include <optional>
@@ -22,3 +24,7 @@ private:
     ElementID id;
     TimeOffset di;
 };
+//
+//
+//
+#endif
