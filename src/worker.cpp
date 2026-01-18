@@ -2,28 +2,22 @@
 // Lukasz 15.01.2026
 //
 
-#include "nodes.hpp"
 #include "worker.hpp"
-#include "storehouse.hpp"
-#include <cstdlib>
 
 void Worker::do_work(Time t) {
-    // 1. Jeśli nie pracujemy, a kolejka nie jest pusta - pobierz paczkę
-    if (!processingbuffer && !q_->empty()) {
-        processingbuffer = q->pop();
-        startTime = t;
+    // 1. Jeśli bufor pusty i mamy coś w kolejce - zacznij pracę
+    if (!processing_buffer_ && !q_->empty()) {
+        processing_buffer_ = q_->pop();
+        start_time_ = t;
     }
 
-    // 2. Jeśli pracujemy, sprawdź czy czas minął
-    if (processingbuffer) {
-        // Czas pracy to różnica między aktualnym czasem a czasem rozpoczęcia.
-        // Jeśli pd = 1, paczka powinna wyjść w tym samym kwancie czasu.
-        if (t - startTime + 1 >= pd_) {
-            push_package(std::move(*processingbuffer));
-            processingbuffer.reset();
+    // 2. Jeśli pracujemy, sprawdź czy czas przetwarzania upłynął
+    if (processing_buffer_) {
+        if (t - start_time_ + 1 >= pd_) {
+            push_package(std::move(*processing_buffer_));
+            processing_buffer_.reset();
+            start_time_ = 0;
         }
     }
 }
-//
-//
-//
+
