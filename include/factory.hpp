@@ -1,22 +1,23 @@
-//
-// Created by Paweł Krok on 19.01.2026.
-//
-
-#ifndef FACTORY_HPP
-#define FACTORY_HPP
+#ifndef NETSIM_FACTORY_HPP
+#define NETSIM_FACTORY_HPP
 
 #include "types.hpp"
-#include "nodes.hpp"   // ważne: w nodes.hpp macie (lokalnie) dołączone ramp/worker/storehouse
-
+#include "nodes.hpp"
+#include "storage_types.hpp"
+#include <numeric>
 #include <algorithm>
+#include <istream>
 #include <list>
 #include <map>
 #include <stdexcept>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
-// ============================================================
+// --------------------
 // NodeCollection<T>
-// Używamy std::list -> stabilne adresy elementów (ReceiverPreferences trzyma wskaźniki)
-// ============================================================
+// --------------------
 template <typename Node>
 class NodeCollection {
 public:
@@ -24,7 +25,6 @@ public:
     using iterator = typename container_t::iterator;
     using const_iterator = typename container_t::const_iterator;
 
-    // przejmuje obiekt (zgodnie ze specyfikacją)
     void add(Node&& node) { collection_.emplace_back(std::move(node)); }
 
     iterator find_by_id(ElementID id) {
@@ -44,7 +44,7 @@ public:
         }
     }
 
-    // 6 metod iteratorów (wymagane)
+    // 6 metod iteratorów
     iterator begin() { return collection_.begin(); }
     iterator end() { return collection_.end(); }
     const_iterator begin() const { return collection_.begin(); }
@@ -56,25 +56,25 @@ private:
     container_t collection_;
 };
 
-// ============================================================
+// --------------------
 // Spójność sieci (DFS)
-// ============================================================
+// --------------------
 enum class NodeColor { UNVISITED, VISITED, VERIFIED };
 
 bool has_reachable_storehouse(const PackageSender* sender,
                               std::map<const PackageSender*, NodeColor>& node_colors);
 
-// ============================================================
-// Factory (część A: core, bez IO)
-// ============================================================
+// --------------------
+// Factory
+// --------------------
 class Factory {
 public:
-    // --- dodawanie ---
+    // add
     void add_ramp(Ramp&& r) { ramps_.add(std::move(r)); }
     void add_worker(Worker&& w) { workers_.add(std::move(w)); }
     void add_storehouse(Storehouse&& s) { storehouses_.add(std::move(s)); }
 
-    // --- usuwanie ---
+    // remove
     void remove_ramp(ElementID id) { ramps_.remove_by_id(id); }
     void remove_worker(ElementID id) { remove_receiver(workers_, id); }
     void remove_storehouse(ElementID id) { remove_receiver(storehouses_, id); }
