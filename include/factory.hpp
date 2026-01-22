@@ -137,5 +137,12 @@ void Factory::remove_receiver(NodeCollection<ReceiverNode>& collection, ElementI
 
     collection.remove_by_id(id);
 }
+// --------------------
+// IO
+// --------------------
+Factory load_factory_structure(std::istream& is);
+void save_factory_structure(const Factory& factory, std::ostream& os);
 
 #endif // NETSIM_FACTORY_HPP
+
+
