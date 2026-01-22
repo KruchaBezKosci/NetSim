@@ -4,6 +4,9 @@
 #include "types.hpp"
 #include "nodes.hpp"
 #include "storage_types.hpp"
+#include "ramp.hpp"
+#include "worker.hpp"
+#include "storehouse.hpp"
 #include <numeric>
 #include <algorithm>
 #include <istream>
