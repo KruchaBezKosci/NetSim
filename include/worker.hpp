@@ -33,7 +33,10 @@ public:
     // Dodatkowe metody zgodne ze schematem UML
     TimeOffset get_processing_duration() const { return pd_; }
     Time get_package_processing_start_time() const { return start_time_; }
-
+    Time get_processing_time() const { return pd_; }
+    const std::optional<Package> &get_processing_buffer() const {
+        return this->processing_buffer_;
+    }
 private:
     ElementID id_;
     TimeOffset pd_;

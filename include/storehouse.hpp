@@ -8,7 +8,7 @@
 #include "types.hpp"
 #include "package.hpp"
 #include "storage_types.hpp"
-#include "nodes.hpp" // Zawiera IPackageReceiver
+#include "nodes.hpp"
 
 class Storehouse : public IPackageReceiver {
 public:
@@ -17,14 +17,14 @@ public:
 
     void receive_package(Package&& p) override { d_->push(std::move(p)); }
     ElementID get_id() const override { return id_; }
-
     ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
-
     IPackageStockpile::const_iterator begin() const override { return d_->begin(); }
     IPackageStockpile::const_iterator end() const override { return d_->end(); }
     IPackageStockpile::const_iterator cbegin() const override { return d_->cbegin(); }
     IPackageStockpile::const_iterator cend() const override { return d_->cend(); }
-
+    IPackageQueue* get_queue() const {
+        return d_.get();
+    }
 private:
     ElementID id_;
     std::unique_ptr<IPackageQueue> d_;
