@@ -54,5 +54,6 @@ int main() {
         std::cerr << "Błąd spójności sieci: " << e.what() << std::endl;
     }
 
+
     return 0;
 }
